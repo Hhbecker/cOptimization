@@ -1,6 +1,10 @@
 # cOptimization
 
+
+
 This repository contains my work using R. Bryant and D. O'Hallaron's C optimization code template developed at Carnegie Mellon University. This template will allow me to test out the effect of different code omptimization techniques on the clock time and number of cycles needed by the processor to execute the code. 
+
+I will do my best to keep this up to date with everything I know about code optimization (include torvalds linked list idea).
 
 The objective is to show how program performance can be improved by using only a small menu of optimization techniques.
 
@@ -10,6 +14,10 @@ to do
 * start development on the seas shell 
 * try out different techniques, and then describe which techniques were effective, or not effective, and why or why not
 
+Where's the line between readability and optimization?
+
+
+If you examine the kernels.c code you will find that I am using the timestamp counter ( rdtsc ) and usage time. Both of these have problems when it comes to accurate measurements – specifically, they are affected by other system tasks. (So you will may get weird times sometimes; including differing times each time you run the project. THIS is why the report is very important.)
 
 Both code and a report 
 
@@ -81,3 +89,46 @@ At a minimum, your report must describe:
 *  (iii) provide a complete table of your performance results (i.e., a table showing how much better you did compared to the naive implementations – the performance improvement in speed). Simply including the output of the program does NOT constitute a report!
 *  (iv) Which optimizations gave you the best performance and why you think they improved the perfor- mance. If some of the optimizations did not provide much of an improvement then explain why they did not.
 * If you chose a specific technique, or a value for a parameter, over another technique your report should provide your rationale (or experimental results, if that was how you reached your decision) for these choices. We will give you (significant) partial credit if your report is correct but your implementations do not provide the minimum speedups we require.
+
+
+Define these terms:
+Some Machine-Independent Optimizations: 
+Dataflow Analysis and Optimizations
+Constant folding
+Copy propagation
+Elimination of common subexpression
+Dead code elimination
+x = 1 
+x = b + c or if x is not referred to at all Saves one instruction…reduce IC
+
+Code motion
+Strength reduction
+Function/Procedure inlining
+Improving memory locality
+
+#### Loop invariants:
+ A loop invariant is a property of a program loop that is true before (and after) each iteration. If a loop invariant is calculated in each iteration it is best to remove that calculation from the loop itself. Calculate the loop invariant once before the loop begins, store it as a variable, and pass that into the loop.
+
+#### Strength Reduction:
+• Replace costly operation with simpler one
+• Shift, add instead of multiply or divide
+16*x --> x << 4
+o Utility is machine dependent (relative cost of multiplication vs addition depends on hardware/ISA)
+a : = b*17 a: = (b<<4) + b
+
+
+#### Function inlining 
+ Create activation records, allocate memory
+• Manipulate stack and frame pointers
+•Instructions to Push arguments to stack
+•Instructions to Push frame pointer, return addr.
+•Execute instructions of function
+•Instructions to Pop return value, reset frame pointer, pop
+return address
+•The bookkeeping instructions are essentially an
+“overhead”
+• They do not do the work of the function
+
+
+
+
