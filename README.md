@@ -171,3 +171,19 @@ struct merge cache_block_entry[SIZE]
 An array of these structs which each hold a single element 
 A single struct of arrays would do the same thign I believe
 
+
+
+
+Explain how the image matrix is represented as a 1D array 
+Explain how a clockwise vs counterclockwise 90º rotation is achieved with the 1D array 
+
+Our focus is on the user CPU time. We are interested in comparing the time the processor spends executing our lines of code specifically. Time spent on I/O and other system routines is not relevant to our comparison. 
+
+Memory access time optimization: How to arrange data/instructions so that we have as few cache misses as possible.
+
+
+
+What is a chache? 
+What are the Li vs Ld caches?
+What is cache size vs block size?
+ 
