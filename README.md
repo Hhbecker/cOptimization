@@ -130,5 +130,44 @@ return address
 • They do not do the work of the function
 
 
+#### Locality
+The Principle of Locality: programs tend to reuse data and instructions near those they
+have used recently, or that were recently referenced themselves.
 
+• Temporal locality: Recently referenced items are likely to be
+referenced in the near future.
+• Spatial locality: Items with nearby addresses tend to be
+referenced close together in time.
+
+Column major vs row major order
+* 2D arrays and matrices are stored as 1D arrays in Row Major order in C
+* to maximize cache hits you want to access elements sequentially and in row major order
+
+
+• Merging Arrays: improve spatial locality by single array of compound
+elements vs. 2 arrays
+• Loop Interchange: change nesting of loops to access data in order
+stored in memory
+• Loop Fusion: Combine 2 independent loops that have same looping
+and some variables overlap
+• Blocking: Improve temporal locality by accessing “blocks” of data
+repeatedly vs. going down whole columns or rows
+
+    /* Before:*/
+    int tag[SIZE]
+    int byte1[SIZE]
+    int byte2[SIZE]
+    int dirty[size]
+
+    /* After */
+    struct merge {
+    int tag;
+    int byte1;
+    int byte2;
+    int dirty;
+    }
+
+struct merge cache_block_entry[SIZE]
+An array of these structs which each hold a single element 
+A single struct of arrays would do the same thign I believe
 
