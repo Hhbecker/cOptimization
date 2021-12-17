@@ -174,12 +174,20 @@ void my_rotate(int dim, pixel *src, pixel *dst, int *rusage_time, unsigned long 
 	// j in outer loop decrementing both i and j with dim replacement
 
     int limit = dim-1;
+	int limJ = limit;
 
 	for (j = limit; j >=0; j--){
+		limJ = limit-j;
 		for (i = limit; i >=0; i--){
-			dst[RIDX(limit-j, i, dim)] = src[RIDX(i, j, dim)];
+			dst[RIDX(limJ, i, dim)] = src[RIDX(i, j, dim)];
 		}
 	}
+
+// // this is literally how its stored so accessing it this way has to be the fastest
+// 	  for (i = 0; i < dim; i++) {
+//     for (j = 0; j < dim; j++) {
+//       /* Original image initialized to random colors */
+//       orig[RIDX(i,j,dim)].red = random_in_interval(0, 65536);
 
 
 
