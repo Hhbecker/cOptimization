@@ -136,9 +136,11 @@ void my_rotate(int dim, pixel *src, pixel *dst, int *rusage_time, unsigned long 
 	// }
 
 // i on the outer loop
+	// int in = 0;
 	// 	for (i = 0; i < dim; i++){
+	// 		in = i*dim;
 	// 	    for (j = 0; j < dim; j++){
-	// 		    dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+	// 		    dst[RIDX(dim-1-j, i, dim)] = src[in+j];
 	// 	    }
 	//  }
 
@@ -150,11 +152,15 @@ void my_rotate(int dim, pixel *src, pixel *dst, int *rusage_time, unsigned long 
 	//  }
 
 // i on the outer loop + decrementing i and j instead of incrementing 
+
 	// 	for (i = dim-1; i >=0; i--){
 	// 	    for (j = dim-1; j >=0; j--){
 	// 		    dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
 	// 	    }
 	//  }
+
+
+
 
 // // j in outer loop decrementing j incrmeenting i
 	// for (j = dim-1; j >=0; j--){
@@ -169,7 +175,6 @@ void my_rotate(int dim, pixel *src, pixel *dst, int *rusage_time, unsigned long 
 	// 		dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
 	// 	}
 	// }
-
 
 	// j in outer loop decrementing both i and j with dim replacement
 
@@ -188,7 +193,6 @@ void my_rotate(int dim, pixel *src, pixel *dst, int *rusage_time, unsigned long 
 //     for (j = 0; j < dim; j++) {
 //       /* Original image initialized to random colors */
 //       orig[RIDX(i,j,dim)].red = random_in_interval(0, 65536);
-
 
 
 /* end of computation for rotate function. any changes you make should be made above this line. */
@@ -281,6 +285,34 @@ static pixel avg(int dim, int i, int j, pixel *src)
 	return current_pixel;
 }
 
+static pixel myAvg(int dim, int i, int j, pixel *src) 
+{
+	int ii, jj;
+	pixel_sum sum;
+	pixel current_pixel;
+
+	//initialize_pixel_sum(&sum);
+	sum.red = sum.green = sum.blue = 0;
+	sum.num = 0;
+	
+	int jStart = maximum(j-1, 0);
+	int jStop = minimum(j+1, dim-1);
+
+	int iStart = maximum(i-1, 0);
+	int iStop = minimum(i+1, dim-1);
+
+	for(ii = iStart; ii <= iStop; ii++) 
+		for(jj = jStart; jj <= jStop; jj++) 
+			accumulate_sum(&sum, src[RIDX(ii, jj, dim)]);
+
+	
+    //pixel *current_pixel = &current_pix;
+	current_pixel.red = (unsigned short) (sum.red/sum.num);
+	current_pixel.green = (unsigned short) (sum.green/sum.num);
+	current_pixel.blue = (unsigned short) (sum.blue/sum.num);
+	return current_pixel;
+}
+
 /******************************************************
  * Your different versions of the smooth kernel go here
  ******************************************************/
@@ -335,9 +367,9 @@ void my_smooth(int dim, pixel *src, pixel *dst, int *rusage_time, unsigned long 
 /* ANY CHANGES TO BE MADE SHOULD BE BELOW HERE */
 /* below are the main computations for your implementation of the smooth function. Any changes in implementation will go here or the other functiosn it calls */
 
-	for (j = 0; j < dim; j++)
-		for (i = 0; i < dim; i++)
-			dst[RIDX(i, j, dim)] = avg(dim, i, j, src);
+	for (i = 0; i < dim; i++)
+		for (j = 0; j < dim; j++)
+			dst[RIDX(i, j, dim)] = myAvg(dim, i, j, src);
 
 /* end of computation for smooth function. so don't change anything after this in this function. */
 /* END OF CHANGES */
