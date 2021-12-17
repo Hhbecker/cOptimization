@@ -128,9 +128,59 @@ void my_rotate(int dim, pixel *src, pixel *dst, int *rusage_time, unsigned long 
 	
 	//int limit = dim-1; 
 	
-	for (j = 0; j < dim; j++)
-		for (i = 0; i < dim; i++)
-			dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+	// original
+	// for (j = 0; j < dim; j++){
+	// 	for (i = 0; i < dim; i++){
+	// 		dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+	// 	}
+	// }
+
+// i on the outer loop
+	// 	for (i = 0; i < dim; i++){
+	// 	    for (j = 0; j < dim; j++){
+	// 		    dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+	// 	    }
+	//  }
+
+// // i on the outer loop + decrementing i instead of incrementing 
+	// 	for (i = dim-1; i >=0; i--){
+	// 	    for (j = 0; j < dim; j++){
+	// 		    dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+	// 	    }
+	//  }
+
+// i on the outer loop + decrementing i and j instead of incrementing 
+	// 	for (i = dim-1; i >=0; i--){
+	// 	    for (j = dim-1; j >=0; j--){
+	// 		    dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+	// 	    }
+	//  }
+
+// // j in outer loop decrementing j incrmeenting i
+	// for (j = dim-1; j >=0; j--){
+	// 	for (i = 0; i < dim; i++){
+	// 		dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+	// 	}
+	// }
+
+// j in outer loop decrementing both i and j
+	// for (j = dim-1; j >=0; j--){
+	// 	for (i = dim-1; i >=0; i--){
+	// 		dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+	// 	}
+	// }
+
+
+	// j in outer loop decrementing both i and j with dim replacement
+
+    int limit = dim-1;
+
+	for (j = limit; j >=0; j--){
+		for (i = limit; i >=0; i--){
+			dst[RIDX(limit-j, i, dim)] = src[RIDX(i, j, dim)];
+		}
+	}
+
 
 
 /* end of computation for rotate function. any changes you make should be made above this line. */

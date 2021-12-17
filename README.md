@@ -187,3 +187,56 @@ What is a chache?
 What are the Li vs Ld caches?
 What is cache size vs block size?
  
+
+    getconf WORD_BIT
+    > 32
+
+    arch
+    > x86_64
+
+    lscpu
+    >Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                80
+On-line CPU(s) list:   0-79
+Thread(s) per core:    2
+Core(s) per socket:    20
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 85
+Model name:            Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz
+Stepping:              4
+CPU MHz:               2000.000
+BogoMIPS:              4000.00
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              1024K
+L3 cache:              28160K
+
+
+x86_64 ISA has 64 byte cache block size 
+
+if the cache is 32KilaBytes that's 32k/64 blocks 
+
+if the array stores integers which are each 32 bits (4 bytes) in C then each block stores 64/4= 16 integers in a block
+
+if a block is loaded with the first cell of a 2D array the next 16 cells in that row will be added to the cache.
+
+What is the difference between: 
+L1d = L1 data cache
+L1i = L1 instruction cache
+L2
+L3 
+caches 
+
+Princeton vs Harvard vs Von Neumman architecture 
+
+
+Interestingly, malloc is never used to create space for the pixel struct when storing both the original and modified images. This means the image arrays are stored on the stack. As we know the stack grows from higher to lower memory, therefore, if a cache block was created starting with the first index of the array the rest of the cache block would be filled by contents of memory that were not part of the array because the array values after the first cell would be stored in memory at lower addresses than the address of the first cell.
+
+
+Show image of stack array vs heap array. Count down in hex for practice 
