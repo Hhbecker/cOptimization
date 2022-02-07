@@ -4,8 +4,6 @@
 
 This repository contains my work using R. Bryant and D. O'Hallaron's C optimization code template developed at Carnegie Mellon University. This template will allow me to test out the effect of different code omptimization techniques on the clock time and number of cycles needed by the processor to execute the code. 
 
-I will do my best to keep this up to date with everything I know about code optimization (include torvalds linked list idea).
-
 The objective is to show how program performance can be improved by using only a small menu of optimization techniques.
 
 to do 
