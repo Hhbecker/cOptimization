@@ -50,11 +50,11 @@ As can be seen, RGB values have 16-bit representations (“16-bit color”).
 These are predefined functions that the C preprocessor will recognize.
 
 An example of a function-like macro:
-    #define circleArea(r) (3.1415*(r)*(r))
-Every time the preprocessor encounters circleArea(argument), it replaces it with (3.1415*(argument)*(argument))
+    `#define circleArea(r) (3.1415*(r)*(r))`
+Every time the preprocessor encounters circleArea(argument), it replaces it with `(3.1415*(argument)*(argument))`
 
-An image I is represented as a one-dimensional array of pixels, where the (i, j)th pixel is I[RIDX(i,j,n)]. Here n is the dimension of the image matrix, and RIDX is a macro defined as follows:
-#define RIDX(i,j,n) ((i)*(n)+(j))
+An image I is represented as a one-dimensional array of pixels, where the (i, j)th pixel is `I[RIDX(i,j,n)]`. Here n is the dimension of the image matrix, and RIDX is a macro defined as follows:
+`#define RIDX(i,j,n) ((i)*(n)+(j))`
 
 ### Performance Measures
 
@@ -110,9 +110,9 @@ Improving memory locality
 #### Strength Reduction:
 • Replace costly operation with simpler one
 • Shift, add instead of multiply or divide
-16*x --> x << 4
+`16*x --> x << 4`
 o Utility is machine dependent (relative cost of multiplication vs addition depends on hardware/ISA)
-a : = b*17 a: = (b<<4) + b
+`a : = b*17 a: = (b<<4) + b`
 
 
 #### Function inlining 
@@ -238,3 +238,17 @@ Interestingly, malloc is never used to create space for the pixel struct when st
 
 
 Show image of stack array vs heap array. Count down in hex for practice 
+
+## Question for professor
+My main confusion was on the rotate operation which is shown in the image below. I thought maximizing the cache hits when accessing the src pixels would be one of the most effective optimization strategies. I don’t think I figured out the proper strategy to maximize the cache hits. 1.) I figured only load operations make use of the cache because store operations must store the data all the way in lower memory regardless of the access pattern. Therefore, the right hand side of the assignment operation below should be the main target for optimization. 2.) To maximize cache hits when accessing the src pixels, one should access the 1D array in row major order (b/c C uses row major) which means placing the ‘i’ iterator (rows) in the outer for loop and placing the ‘j’ iterator (columns) in the inner for loop.
+
+3.) We want the next values we will be accessing to fill the cache. To do this, we need to loop through the array in row major order but we also need to start at the lowest memory address of the array and loop towards the highest memory address of the array because on each cache miss the data in the addresses after it fills that cache block. Either the 1D array of pixels is stored on the heap where it grows from lower to higher memory addresses, or it’s on the run-time stack where it grows from higher to lower memory addresses. It seemed to me like the allocation of the pixel array in the driver class was static so the 1D pixel array that the rotate method gets a pointer to would be stored on the stack and would grow from larger to smaller memory addresses. If the 1D pixel array is on the stack then the last element src[dim-1, dim-1] would be at the lowest memory address and because the cache block is filled with data after the address that produces a miss you would want to start by accessing the last index in the 1D array so that the subsequent higher memory addresses used to fill the rest of the block would contain the rest of the 1D array.
+10:39
+4.) Typing the “arch” command and the “lscpu” command into the SEAS shell showed me that the shell has an L1 data cache size of 32KiloBytes and uses x86_64 ISA. The cache block size for this ISA is usually 64 bytes from what I found online. If there are 3 unsigned shorts in each pixel struct then each pixel in the 1D array should take up (3*16) = 48 bits = 6 bytes of memory. If each cache block is 64 bytes and each pixel struct is 6 bytes then 10 pixels should fit per cache block and so there should be about 10 cache hits for every 1 miss (Assuming everything above is correct and we access the 1D array in the sequential order that its stored).
+I’m clearly not thinking about this correctly because the optimization I thought should work made things about 90% slower. Understanding optimizations like this is really something i’d like to take away from this course. What are your thoughts on where I went wrong?
+
+
+
+
+
+
